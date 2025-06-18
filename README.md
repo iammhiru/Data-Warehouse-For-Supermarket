@@ -9,7 +9,7 @@
 
 ## System pipeline
 
-![Luồng xử lí dữ liệu](https://github.com/iammhiru/Supermarket-ETL-System/blob/master/pic/Flow.png)
+![Luồng xử lí dữ liệu](https://github.com/iammhiru/Data-Warehouse-For-Supermarket/blob/main/pic/Flow.png)
 
 ## Deploy
 
@@ -47,4 +47,4 @@ trino://hive@trino:8080/hive
 
 #### Doanh thu theo nhóm sản phẩm
 
-<img style="width:70%" src="https://github.com/iammhiru/DataWarehouseForSupermarket/blob/master/pic/doanh_thu_nhom.png">
+<img style="width:70%" src="https://github.com/iammhiru/Data-Warehouse-For-Supermarket/blob/main/pic/doanh_thu_nhom.png">
