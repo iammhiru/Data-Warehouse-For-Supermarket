@@ -47,4 +47,4 @@ trino://hive@trino:8080/hive
 
 #### Doanh thu theo nhóm sản phẩm
 
-<img style="width:70%" src="https://github.com/iammhiru/DataWarehouseForSupermarkert/blob/master/pic/doanh_thu_nhom.png">
+<img style="width:70%" src="https://github.com/iammhiru/DataWarehouseForSupermarket/blob/master/pic/doanh_thu_nhom.png">
