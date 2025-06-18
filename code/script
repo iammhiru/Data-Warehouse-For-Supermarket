@@ -1,0 +1,2 @@
+spark-submit /opt/bitnami/spark/etl/stage.py
+spark-submit /opt/bitnami/spark/etl/transform.py

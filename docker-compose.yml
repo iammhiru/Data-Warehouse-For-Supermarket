@@ -1,0 +1,299 @@
+version: '2.4'
+
+x-airflow-common:
+  &airflow-common
+  image: airflow_vdt:1.2
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CORE__FERNET_KEY: ''
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- apache-airflow-providers-microsoft-mssql}
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/logs:/opt/airflow/logs 
+    - ./code:/opt/airflow/code
+    - ./airflow/trino:/opt/airflow/trino
+  user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
+  depends_on:
+    postgres:
+      condition: service_healthy
+  networks:
+    vdt:
+
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres-vdt
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    restart: always
+    networks:
+      vdt:
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+
+  airflow-webserver:
+    <<: *airflow-common
+    container_name: airflow-webserver-vdt
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    ports:
+      - 8282:8080
+    restart: always
+    command: ["airflow", "webserver"]
+
+  airflow-scheduler:
+    <<: *airflow-common
+    container_name: airflow-scheduler-vdt
+    restart: always
+    command: ["airflow", "scheduler"]
+
+  airflow-init:
+    <<: *airflow-common
+    container_name: airflow-init-vdt
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_UPGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
+    command: version  
+
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: namenode-vdt
+    restart: always
+    ports:
+      - 9870:9870
+      - 9000:9000
+    volumes:
+      - hadoop_namenode-vdt:/hadoop/dfs/name
+      - ./data:/data-set
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./services/hadoop/hadoop.env
+    networks:
+      - vdt
+    cpus: 0.2
+    mem_limit: 1g
+
+  datanode1:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode1-vdt
+    restart: always
+    ports:
+      - 9864:9864
+      - 9866:9866
+    volumes:
+      - hadoop_datanode1-vdt:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+    env_file:
+      - ./services/hadoop/hadoop.env
+    networks:
+      - vdt
+    cpus: 0.2
+    mem_limit: 1g
+
+  resourcemanager:
+    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
+    container_name: resourcemanager-vdt
+    restart: always
+    environment:
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864"
+    env_file:
+      - ./services/hadoop/hadoop.env
+    networks:
+      - vdt
+    cpus: 0.2
+    mem_limit: 1g
+
+  nodemanager1:
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
+    container_name: nodemanager1-vdt
+    restart: always
+    environment:
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 resourcemanager:8088"
+    env_file:
+      - ./services/hadoop/hadoop.env
+    networks:
+      - vdt
+    cpus: 0.2
+    mem_limit: 1g
+
+  historyserver:
+    image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
+    container_name: historyserver-vdt
+    restart: always
+    environment:
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 resourcemanager:8088"
+    volumes:
+      - hadoop_historyserver-vdt:/hadoop/yarn/timeline
+    env_file:
+      - ./services/hadoop/hadoop.env
+    networks:
+      - vdt
+    cpus: 0.2
+    mem_limit: 1g
+
+  spark-master:
+    image: bitnami/spark:3.3
+    container_name: spark-master-vdt
+    depends_on:
+    - namenode
+    - resourcemanager
+    - hive-metastore
+    restart: always
+    environment:
+      - SPARK_MODE=master
+      - SPARK_MASTER_HOST=spark-master-vdt
+      - SPARK_MASTER_PORT=7077
+      - SPARK_WEBUI_PORT=8080
+      - SPARK_SUBMIT_ARGS=--jars /opt/bitnami//spark/jars/iceberg-spark-runtime.jar,/opt/bitnami/spark/jars/iceberg-hive-runtime.jar \
+        --conf spark.sql.catalog.spark_catalog=org.apache.iceberg.spark.SparkSessionCatalog \
+        --conf spark.sql.catalog.hadoop=org.apache.iceberg.spark.SparkCatalog \
+        --conf spark.sql.catalog.hadoop.type=hive \
+        --conf spark.sql.catalog.hadoop.uri=thrift://hive-metastore:9083 \
+        --conf spark.sql.catalog.hadoop.warehouse=/user/hive/warehouse
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    volumes:
+      - ./hadoop/hive-site.xml:/opt/bitnami/spark/conf/hive-site.xml
+      - ./services/hadoop/core-site.xml:/opt/bitnami/spark/conf/core-site.xml
+      - ./code:/opt/bitnami/spark/etl
+      - ./jars/iceberg-hive-runtime-1.7.2.jar:/opt/bitnami/spark/jars/iceberg-hive-runtime-1.7.2.jar
+      - ./jars/iceberg-spark-runtime-3.3_2.12-1.7.2.jar:/opt/bitnami/spark/jars/iceberg-spark-runtime-3.3_2.12-1.7.2.jar
+    networks:
+      - vdt
+    cpus: 1
+    mem_limit: 2g
+
+  spark-worker:
+    image: bitnami/spark:3.3
+    container_name: spark-worker-vdt
+    restart: always
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER=spark://spark-master-vdt:7077
+      - SPARK_SUBMIT_ARGS=--jars /opt/bitnami/iceberg-jars/iceberg-spark-runtime.jar,/opt/bitnami/iceberg-jars/iceberg-hive-runtime.jar \
+        --conf spark.sql.catalog.spark_catalog=org.apache.iceberg.spark.SparkSessionCatalog \
+        --conf spark.sql.catalog.hadoop=org.apache.iceberg.spark.SparkCatalog \
+        --conf spark.sql.catalog.hadoop.type=hive \
+        --conf spark.sql.catalog.hadoop.uri=thrift://hive-metastore:9083 \
+        --conf spark.sql.catalog.hadoop.warehouse=/user/hive/warehouse
+    depends_on:
+      - spark-master
+    volumes:
+      - ./hadoop/hive-site.xml:/opt/bitnami/spark/conf/hive-site.xml
+      - ./code:/opt/bitnami/spark/etl
+      - ./jars/iceberg-hive-runtime-1.7.2.jar:/opt/bitnami/spark/jars/iceberg-hive-runtime-1.7.2.jar
+      - ./jars/iceberg-spark-runtime-3.3_2.12-1.7.2.jar:/opt/bitnami/spark/jars/iceberg-spark-runtime-3.3_2.12-1.7.2.jar
+    networks:
+      - vdt
+
+  hive-metastore-postgresql:
+    image: bde2020/hive-metastore-postgresql:2.3.0
+    container_name: hive-metastore-postgresql-vdt
+    networks:
+      - vdt
+    volumes:
+      - hive_metastore_postgresql-vdt:/var/lib/postgresql/data
+
+  hive-metastore:
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    container_name: hive-metastore-vdt
+    environment:
+      SERVICE_PRECONDITION: "hive-metastore-postgresql:5432"
+    ports:
+      - "9083:9083"
+    depends_on:
+      - hive-metastore-postgresql
+    env_file:
+      - ./hadoop/hadoop-hive.env
+    command: /opt/hive/bin/hive --service metastore
+    restart: always
+    networks:
+      - vdt
+
+  trino:
+    image: trinodb/trino:latest
+    container_name: trino-vdt
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./trino/etc:/etc/trino
+    depends_on:
+      - hive-metastore
+    networks:
+      - vdt
+    cpus: 1.5
+    mem_limit: 3g
+
+  superset-db:
+    image: postgres:13
+    container_name: superset-db-vdt
+    environment:
+      POSTGRES_USER: superset
+      POSTGRES_PASSWORD: superset
+      POSTGRES_DB: superset
+    volumes:
+      - superset_db-vdt:/var/lib/postgresql/data
+    networks:
+      - vdt
+
+  superset-redis:
+    image: redis:6-alpine
+    container_name: superset-redis-vdt
+    networks:
+      - vdt
+
+  superset:
+    image: superset-trino:1.0
+    container_name: superset-vdt
+    restart: always
+    ports:
+      - "8088:8088"
+    environment:
+      SUPERSET_ENV: production
+      DATABASE_URL: postgresql+psycopg2://superset:superset@superset-db:5432/superset
+      REDIS_URL: redis://superset-redis:6379/0
+      SUPERSET_SECRET_KEY: hieupham2003
+      SUPERSET_LOAD_EXAMPLES: 'yes'
+    volumes:
+      - ./superset/superset-init.sh:/app/run_superset.sh
+      - superset_home-vdt:/app/superset_home
+    entrypoint: ["/app/run_superset.sh"]
+    depends_on:
+      - superset-db
+      - superset-redis
+    networks:
+      - vdt
+
+volumes:
+  postgres-db-volume:
+  hadoop_namenode-vdt:
+  hadoop_datanode1-vdt:
+  hadoop_historyserver-vdt:
+  hive_metastore_postgresql-vdt:
+  superset_db-vdt:
+  superset_home-vdt:
+
+networks:
+  vdt:
+    driver: bridge

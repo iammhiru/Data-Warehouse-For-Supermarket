@@ -1,0 +1,191 @@
+[2025-06-18T06:56:29.003+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-06-18T06:56:29.068+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ingest_csv_to_hive.spark_ingest scheduled__2025-06-17T00:00:00+00:00 [queued]>
+[2025-06-18T06:56:29.090+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ingest_csv_to_hive.spark_ingest scheduled__2025-06-17T00:00:00+00:00 [queued]>
+[2025-06-18T06:56:29.093+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 2
+[2025-06-18T06:56:29.117+0000] {taskinstance.py:2889} INFO - Executing <Task(BashOperator): spark_ingest> on 2025-06-17 00:00:00+00:00
+[2025-06-18T06:56:29.127+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=188) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-06-18T06:56:29.129+0000] {standard_task_runner.py:72} INFO - Started process 191 to run task
+[2025-06-18T06:56:29.128+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'ingest_csv_to_hive', 'spark_ingest', 'scheduled__2025-06-17T00:00:00+00:00', '--job-id', '51', '--raw', '--subdir', 'DAGS_FOLDER/ETL_flow.py', '--cfg-path', '/tmp/tmpz9nk0qya']
+[2025-06-18T06:56:29.131+0000] {standard_task_runner.py:105} INFO - Job 51: Subtask spark_ingest
+[2025-06-18T06:56:29.155+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/settings.py:209 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2025-06-18T06:56:29.237+0000] {task_command.py:467} INFO - Running <TaskInstance: ingest_csv_to_hive.spark_ingest scheduled__2025-06-17T00:00:00+00:00 [running]> on host b11ca03b7444
+[2025-06-18T06:56:29.239+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/settings.py:470 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2025-06-18T06:56:29.425+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ingest_csv_to_hive' AIRFLOW_CTX_TASK_ID='spark_ingest' AIRFLOW_CTX_EXECUTION_DATE='2025-06-17T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-06-17T00:00:00+00:00'
+[2025-06-18T06:56:29.428+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2025-06-18T06:56:29.463+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2025-06-18T06:56:29.464+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', 'set -o pipefail && spark-submit --master spark://spark-master:7077 --deploy-mode client /opt/***/code/stage.py --process-date 2025-06-17 2>&1']
+[2025-06-18T06:56:29.482+0000] {subprocess.py:99} INFO - Output:
+[2025-06-18T06:56:34.826+0000] {subprocess.py:106} INFO - 25/06/18 06:56:34 INFO SparkContext: Running Spark version 3.3.4
+[2025-06-18T06:56:34.928+0000] {subprocess.py:106} INFO - 25/06/18 06:56:34 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[2025-06-18T06:56:35.077+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO ResourceUtils: ==============================================================
+[2025-06-18T06:56:35.077+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO ResourceUtils: No custom resources configured for spark.driver.
+[2025-06-18T06:56:35.078+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO ResourceUtils: ==============================================================
+[2025-06-18T06:56:35.078+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO SparkContext: Submitted application: CSV to Hive Tables - staging
+[2025-06-18T06:56:35.112+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 1, script: , vendor: , memory -> name: memory, amount: 1024, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+[2025-06-18T06:56:35.122+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO ResourceProfile: Limiting resource is cpu
+[2025-06-18T06:56:35.123+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO ResourceProfileManager: Added ResourceProfile id: 0
+[2025-06-18T06:56:35.203+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO SecurityManager: Changing view acls to: ***
+[2025-06-18T06:56:35.204+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO SecurityManager: Changing modify acls to: ***
+[2025-06-18T06:56:35.204+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO SecurityManager: Changing view acls groups to:
+[2025-06-18T06:56:35.205+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO SecurityManager: Changing modify acls groups to:
+[2025-06-18T06:56:35.205+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(***); groups with view permissions: Set(); users  with modify permissions: Set(***); groups with modify permissions: Set()
+[2025-06-18T06:56:35.527+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO Utils: Successfully started service 'sparkDriver' on port 38671.
+[2025-06-18T06:56:35.577+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO SparkEnv: Registering MapOutputTracker
+[2025-06-18T06:56:35.627+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO SparkEnv: Registering BlockManagerMaster
+[2025-06-18T06:56:35.655+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+[2025-06-18T06:56:35.656+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+[2025-06-18T06:56:35.662+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+[2025-06-18T06:56:35.694+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-7694f436-5490-4001-8fe0-504bd3ca47dd
+[2025-06-18T06:56:35.717+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO MemoryStore: MemoryStore started with capacity 434.4 MiB
+[2025-06-18T06:56:35.736+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO SparkEnv: Registering OutputCommitCoordinator
+[2025-06-18T06:56:35.995+0000] {subprocess.py:106} INFO - 25/06/18 06:56:35 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+[2025-06-18T06:56:36.273+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO StandaloneAppClient$ClientEndpoint: Connecting to master spark://spark-master:7077...
+[2025-06-18T06:56:36.332+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO TransportClientFactory: Successfully created connection to spark-master/172.28.0.11:7077 after 32 ms (0 ms spent in bootstraps)
+[2025-06-18T06:56:36.474+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO StandaloneSchedulerBackend: Connected to Spark cluster with app ID app-20250618065636-0000
+[2025-06-18T06:56:36.484+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 40071.
+[2025-06-18T06:56:36.484+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO NettyBlockTransferService: Server created on b11ca03b7444:40071
+[2025-06-18T06:56:36.487+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+[2025-06-18T06:56:36.497+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, b11ca03b7444, 40071, None)
+[2025-06-18T06:56:36.500+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO BlockManagerMasterEndpoint: Registering block manager b11ca03b7444:40071 with 434.4 MiB RAM, BlockManagerId(driver, b11ca03b7444, 40071, None)
+[2025-06-18T06:56:36.507+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO StandaloneAppClient$ClientEndpoint: Executor added: app-20250618065636-0000/0 on worker-20250618065604-172.28.0.2-42337 (172.28.0.2:42337) with 6 core(s)
+[2025-06-18T06:56:36.509+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO StandaloneSchedulerBackend: Granted executor ID app-20250618065636-0000/0 on hostPort 172.28.0.2:42337 with 6 core(s), 1024.0 MiB RAM
+[2025-06-18T06:56:36.511+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, b11ca03b7444, 40071, None)
+[2025-06-18T06:56:36.512+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, b11ca03b7444, 40071, None)
+[2025-06-18T06:56:36.700+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO StandaloneAppClient$ClientEndpoint: Executor updated: app-20250618065636-0000/0 is now RUNNING
+[2025-06-18T06:56:36.844+0000] {subprocess.py:106} INFO - 25/06/18 06:56:36 INFO StandaloneSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
+[2025-06-18T06:56:37.374+0000] {subprocess.py:106} INFO - 25/06/18 06:56:37 INFO SharedState: Setting hive.metastore.warehouse.dir ('null') to the value of spark.sql.warehouse.dir.
+[2025-06-18T06:56:37.408+0000] {subprocess.py:106} INFO - 25/06/18 06:56:37 INFO SharedState: Warehouse path is 'file:/tmp/***tmpvjt4944o/spark-warehouse'.
+[2025-06-18T06:56:39.006+0000] {subprocess.py:106} INFO - 25/06/18 06:56:39 WARN SparkSession: Using an existing Spark session; only runtime SQL configurations will take effect.
+[2025-06-18T06:56:41.798+0000] {subprocess.py:106} INFO - 25/06/18 06:56:41 INFO CoarseGrainedSchedulerBackend$DriverEndpoint: Registered executor NettyRpcEndpointRef(spark-client://Executor) (172.28.0.2:41878) with ID 0,  ResourceProfileId 0
+[2025-06-18T06:56:42.008+0000] {subprocess.py:106} INFO - 25/06/18 06:56:42 INFO BlockManagerMasterEndpoint: Registering block manager 172.28.0.2:42099 with 434.4 MiB RAM, BlockManagerId(0, 172.28.0.2, 42099, None)
+[2025-06-18T06:56:43.107+0000] {subprocess.py:106} INFO - 25/06/18 06:56:43 INFO HiveConf: Found configuration file null
+[2025-06-18T06:56:43.117+0000] {subprocess.py:106} INFO - 25/06/18 06:56:43 INFO HiveUtils: Initializing HiveMetastoreConnection version 2.3.9 using Spark classes.
+[2025-06-18T06:56:43.538+0000] {subprocess.py:106} INFO - 25/06/18 06:56:43 INFO HiveClientImpl: Warehouse location for Hive client (version 2.3.9) is file:/tmp/***tmpvjt4944o/spark-warehouse
+[2025-06-18T06:56:43.847+0000] {subprocess.py:106} INFO - 25/06/18 06:56:43 WARN HiveConf: HiveConf of name hive.stats.jdbc.timeout does not exist
+[2025-06-18T06:56:43.847+0000] {subprocess.py:106} INFO - 25/06/18 06:56:43 WARN HiveConf: HiveConf of name hive.stats.retries.wait does not exist
+[2025-06-18T06:56:43.848+0000] {subprocess.py:106} INFO - 25/06/18 06:56:43 INFO HiveMetaStore: 0: Opening raw store with implementation class:org.apache.hadoop.hive.metastore.ObjectStore
+[2025-06-18T06:56:43.920+0000] {subprocess.py:106} INFO - 25/06/18 06:56:43 INFO ObjectStore: ObjectStore, initialize called
+[2025-06-18T06:56:44.199+0000] {subprocess.py:106} INFO - 25/06/18 06:56:44 INFO Persistence: Property hive.metastore.integral.jdo.pushdown unknown - will be ignored
+[2025-06-18T06:56:44.200+0000] {subprocess.py:106} INFO - 25/06/18 06:56:44 INFO Persistence: Property datanucleus.cache.level2 unknown - will be ignored
+[2025-06-18T06:56:47.418+0000] {subprocess.py:106} INFO - 25/06/18 06:56:47 INFO ObjectStore: Setting MetaStore object pin classes with hive.metastore.cache.pinobjtypes="Table,StorageDescriptor,SerDeInfo,Partition,Database,Type,FieldSchema,Order"
+[2025-06-18T06:56:49.793+0000] {subprocess.py:106} INFO - 25/06/18 06:56:49 INFO MetaStoreDirectSql: Using direct SQL, underlying DB is DERBY
+[2025-06-18T06:56:49.795+0000] {subprocess.py:106} INFO - 25/06/18 06:56:49 INFO ObjectStore: Initialized ObjectStore
+[2025-06-18T06:56:49.886+0000] {subprocess.py:106} INFO - 25/06/18 06:56:49 WARN ObjectStore: Version information not found in metastore. hive.metastore.schema.verification is not enabled so recording the schema version 2.3.0
+[2025-06-18T06:56:49.887+0000] {subprocess.py:106} INFO - 25/06/18 06:56:49 WARN ObjectStore: setMetaStoreSchemaVersion called but recording version is disabled: version = 2.3.0, comment = Set by MetaStore UNKNOWN@172.28.0.4
+[2025-06-18T06:56:49.929+0000] {subprocess.py:106} INFO - 25/06/18 06:56:49 WARN ObjectStore: Failed to get database default, returning NoSuchObjectException
+[2025-06-18T06:56:50.212+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO HiveMetaStore: Added admin role in metastore
+[2025-06-18T06:56:50.246+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO HiveMetaStore: Added public role in metastore
+[2025-06-18T06:56:50.319+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO HiveMetaStore: No user is added in admin role, since config is empty
+[2025-06-18T06:56:50.415+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO HiveMetaStore: 0: get_database: default
+[2025-06-18T06:56:50.416+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO audit: ugi=***	ip=unknown-ip-addr	cmd=get_database: default
+[2025-06-18T06:56:50.429+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO HiveMetaStore: 0: get_database: staging
+[2025-06-18T06:56:50.430+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO audit: ugi=***	ip=unknown-ip-addr	cmd=get_database: staging
+[2025-06-18T06:56:50.430+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 WARN ObjectStore: Failed to get database staging, returning NoSuchObjectException
+[2025-06-18T06:56:50.431+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO HiveMetaStore: 0: get_database: staging
+[2025-06-18T06:56:50.432+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO audit: ugi=***	ip=unknown-ip-addr	cmd=get_database: staging
+[2025-06-18T06:56:50.432+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 WARN ObjectStore: Failed to get database staging, returning NoSuchObjectException
+[2025-06-18T06:56:50.444+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO HiveMetaStore: 0: get_database: global_temp
+[2025-06-18T06:56:50.445+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO audit: ugi=***	ip=unknown-ip-addr	cmd=get_database: global_temp
+[2025-06-18T06:56:50.445+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 WARN ObjectStore: Failed to get database global_temp, returning NoSuchObjectException
+[2025-06-18T06:56:50.449+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO HiveMetaStore: 0: create_database: Database(name:staging, description:, locationUri:file:/tmp/***tmpvjt4944o/spark-warehouse/staging.db, parameters:{}, ownerName:***)
+[2025-06-18T06:56:50.449+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO audit: ugi=***	ip=unknown-ip-addr	cmd=create_database: Database(name:staging, description:, locationUri:file:/tmp/***tmpvjt4944o/spark-warehouse/staging.db, parameters:{}, ownerName:***)
+[2025-06-18T06:56:50.450+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 WARN ObjectStore: Failed to get database staging, returning NoSuchObjectException
+[2025-06-18T06:56:50.450+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO FileUtils: Creating directory if it doesn't exist: file:/tmp/***tmpvjt4944o/spark-warehouse/staging.db
+[2025-06-18T06:56:50.605+0000] {subprocess.py:106} INFO - Traceback (most recent call last):
+[2025-06-18T06:56:50.606+0000] {subprocess.py:106} INFO -   File "/opt/***/code/stage.py", line 84, in <module>
+[2025-06-18T06:56:50.608+0000] {subprocess.py:106} INFO -     main()
+[2025-06-18T06:56:50.609+0000] {subprocess.py:106} INFO -   File "/opt/***/code/stage.py", line 59, in main
+[2025-06-18T06:56:50.611+0000] {subprocess.py:106} INFO -     if not path_exists(spark, hdfs_path):
+[2025-06-18T06:56:50.611+0000] {subprocess.py:106} INFO -            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-06-18T06:56:50.611+0000] {subprocess.py:106} INFO -   File "/opt/***/code/stage.py", line 10, in path_exists
+[2025-06-18T06:56:50.613+0000] {subprocess.py:106} INFO -     return fs.exists(p)
+[2025-06-18T06:56:50.613+0000] {subprocess.py:106} INFO -            ^^^^^^^^^^^^
+[2025-06-18T06:56:50.613+0000] {subprocess.py:106} INFO -   File "/home/***/.local/lib/python3.12/site-packages/pyspark/python/lib/py4j-0.10.9.5-src.zip/py4j/java_gateway.py", line 1321, in __call__
+[2025-06-18T06:56:50.614+0000] {subprocess.py:106} INFO -   File "/home/***/.local/lib/python3.12/site-packages/pyspark/python/lib/pyspark.zip/pyspark/sql/utils.py", line 196, in deco
+[2025-06-18T06:56:50.617+0000] {subprocess.py:106} INFO - pyspark.sql.utils.IllegalArgumentException: Wrong FS: hdfs://namenode:9000/landing/item/2025-06-17.csv, expected: file:///
+[2025-06-18T06:56:50.662+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO SparkContext: Invoking stop() from shutdown hook
+[2025-06-18T06:56:50.670+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO SparkUI: Stopped Spark web UI at http://b11ca03b7444:4040
+[2025-06-18T06:56:50.673+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO StandaloneSchedulerBackend: Shutting down all executors
+[2025-06-18T06:56:50.673+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO CoarseGrainedSchedulerBackend$DriverEndpoint: Asking each executor to shut down
+[2025-06-18T06:56:50.685+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
+[2025-06-18T06:56:50.710+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO MemoryStore: MemoryStore cleared
+[2025-06-18T06:56:50.711+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO BlockManager: BlockManager stopped
+[2025-06-18T06:56:50.717+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO BlockManagerMaster: BlockManagerMaster stopped
+[2025-06-18T06:56:50.719+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
+[2025-06-18T06:56:50.729+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO SparkContext: Successfully stopped SparkContext
+[2025-06-18T06:56:50.730+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO ShutdownHookManager: Shutdown hook called
+[2025-06-18T06:56:50.730+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO ShutdownHookManager: Deleting directory /tmp/spark-13d0f502-1382-49d2-ae88-f6d00813299f
+[2025-06-18T06:56:50.734+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO ShutdownHookManager: Deleting directory /tmp/spark-f6fc1ccd-0f03-4ddf-bdf7-1e3c43331af1
+[2025-06-18T06:56:50.737+0000] {subprocess.py:106} INFO - 25/06/18 06:56:50 INFO ShutdownHookManager: Deleting directory /tmp/spark-f6fc1ccd-0f03-4ddf-bdf7-1e3c43331af1/pyspark-c086d553-88c4-4f4d-b618-dd06a0453080
+[2025-06-18T06:56:50.774+0000] {subprocess.py:110} INFO - Command exited with return code 1
+[2025-06-18T06:56:50.793+0000] {taskinstance.py:3311} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 417, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/bash.py", line 276, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 1.
+[2025-06-18T06:56:50.807+0000] {taskinstance.py:1225} INFO - Marking task as UP_FOR_RETRY. dag_id=ingest_csv_to_hive, task_id=spark_ingest, run_id=scheduled__2025-06-17T00:00:00+00:00, execution_date=20250617T000000, start_date=20250618T065629, end_date=20250618T065650
+[2025-06-18T06:56:50.824+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2025-06-18T06:56:50.825+0000] {standard_task_runner.py:124} ERROR - Failed to execute job 51 for task spark_ingest (Bash command failed. The command returned a non-zero exit code 1.; 191)
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py", line 117, in _start_by_fork
+    ret = args.func(args, dag=self.dag)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 116, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 256, in _run_task_by_selected_method
+    return _run_raw_task(args, ti)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 341, in _run_raw_task
+    return ti._run_raw_task(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3005, in _run_raw_task
+    return _run_raw_task(
+           ^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 273, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3159, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3183, in _execute_task
+    return _execute_task(self, context, task_orig)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 417, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/bash.py", line 276, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 1.
+[2025-06-18T06:56:50.850+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 1
+[2025-06-18T06:56:50.870+0000] {taskinstance.py:3895} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-06-18T06:56:50.882+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

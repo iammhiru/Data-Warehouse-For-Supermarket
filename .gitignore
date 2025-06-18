@@ -1,0 +1,6 @@
+.env
+info/
+docs/
+data/
+crawler/*052025/*
+airflow/logs/
